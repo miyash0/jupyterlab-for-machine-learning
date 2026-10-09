@@ -43,11 +43,10 @@ tailscale serve status    # 公開 URL を確認
 
 ### `/jupyter` のようなパス付き公開について
 
-`tailscale serve --set-path` はプレフィックスを外して転送するため、
-Jupyter の `base_url` と食い違います。パスが必要な場合は、`--set-path` を使わず、
-`compose.yaml` の `command` に `--ServerApp.base_url=/jupyter` を付け、
-`tailscale serve --bg https+insecure://...` ではなく、プレフィックスを保つ設定を別途検討してください。
-特に理由がなければ、ルート公開を推奨します。
+`tailscale serve --set-path` は、転送時にパスのプレフィックスを外します。
+そのため Jupyter 側の `base_url` と食い違い、ページが正しく表示されません。
+このリポジトリではルート(`/`)公開を前提にしています。
+パスが必要な場合は、別ポートで公開する方法(`tailscale serve --bg --https=8443 8888`)が簡単です。
 
 ## 停止・更新
 
