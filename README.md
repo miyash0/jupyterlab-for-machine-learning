@@ -10,7 +10,10 @@ TensorFlow / Keras、GPU(NVIDIA)、Tailscale 経由のアクセスを前提に�
   - 入っているもの: TensorFlow / PyTorch(uv で pip 版を導入、CUDA 12 ライブラリ込み)、NumPy、Pandas、scikit-learn、Matplotlib、tqdm
   - 追加パッケージは、conda で入るものを `environment.yml`、pip 版を `requirements.txt` に書いてビルドし直します。
     コンテナ内で `pip install` したものは、コンテナを作り直すと消えます。
-- `./work` をコンテナ内の `/home/jovyan/work` にマウントします。
+- `./work` をコンテナ内の `/home/jovyan/work` にマウントし、JupyterLab のルートにします。
+  - カーネルの作業ディレクトリは、ノートブックのあるディレクトリです。
+  - 開いたままのノートブックを移動・改名した場合は、カーネルを再起動すると新しい場所に切り替わります。
+  - 設定は `jupyter/` にあります。
 - ポートはホストの `127.0.0.1:8888` のみ公開し、外部へは `tailscale serve` で出します。
 
 ## 前提
