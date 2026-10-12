@@ -1,2 +1,5 @@
-# 追加で使いたいライブラリをここに書く
-scikit-learn
+# conda に無い / pip 版を使うものを書く(Dockerfile で uv により conda 環境 ml に入る)
+# PyTorch は Dockerfile の --torch-backend=cu126 で CUDA 12 版になる。
+# TensorFlow が CUDA 12 ビルドなので、CUDA 13 版の PyTorch と混ぜると TensorFlow が GPU を認識しない
+tensorflow[and-cuda]
+torch

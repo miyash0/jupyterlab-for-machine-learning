@@ -5,9 +5,11 @@ TensorFlow / Keras、GPU(NVIDIA)、Tailscale 経由のアクセスを前提に�
 
 ## 構成
 
-- イメージ: `quay.io/jupyter/tensorflow-notebook:cuda12-latest`(公式、conda ベース)
-  - conda 環境は標準で入っているため、別の仮想環境は作りません。
-  - 追加パッケージは `requirements.txt` に書いてビルドします。
+- イメージ: `quay.io/jupyter/minimal-notebook:latest`(公式、conda ベース)
+  - `environment.yml` から conda 環境 `ml` を作り、カーネル `Python (ml)` として登録します。
+  - 入っているもの: TensorFlow / PyTorch(uv で pip 版を導入、CUDA 12 ライブラリ込み)、NumPy、Pandas、scikit-learn、Matplotlib、tqdm
+  - 追加パッケージは、conda で入るものを `environment.yml`、pip 版を `requirements.txt` に書いてビルドし直します。
+    コンテナ内で `pip install` したものは、コンテナを作り直すと消えます。
 - `./work` をコンテナ内の `/home/jovyan/work` にマウントします。
 - ポートはホストの `127.0.0.1:8888` のみ公開し、外部へは `tailscale serve` で出します。
 
@@ -24,11 +26,20 @@ cp .env.example .env     # JUPYTER_TOKEN を変更し、NB_UID/NB_GID を id -u 
 docker compose up -d --build
 ```
 
-GPU の確認(JupyterLab のノートブックで):
+GPU の確認(JupyterLab でカーネル `Python (ml)` を選んだノートブックで):
 
 ```python
 import tensorflow as tf
+import torch
 print(tf.config.list_physical_devices("GPU"))
+print(torch.cuda.is_available())
+```
+
+ターミナルから `ml` 環境を使う場合:
+
+```bash
+docker compose exec -u jovyan jupyter bash
+mamba activate ml
 ```
 
 ## Tailscale で公開(tailnet 内のみ)

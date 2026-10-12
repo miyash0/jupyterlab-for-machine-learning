@@ -1,0 +1,13 @@
+name: ml
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - uv
+  - ipykernel
+  - numpy
+  - pandas
+  - scikit-learn
+  - matplotlib
+  - tqdm
+# TensorFlow / PyTorch は requirements.txt に書き、uv で入れる

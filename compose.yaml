@@ -12,6 +12,8 @@ services:
       CHOWN_HOME: "yes"
       CHOWN_HOME_OPTS: "-R"
       JUPYTER_ENABLE_LAB: "yes"
+      # TensorFlow の INFO/WARNING ログを抑制
+      TF_CPP_MIN_LOG_LEVEL: "2"
       # 必ず .env で設定する
       JUPYTER_TOKEN: ${JUPYTER_TOKEN:?JUPYTER_TOKEN を .env に設定してください}
     # ホストの localhost のみ公開。外部へは tailscale serve 経由
