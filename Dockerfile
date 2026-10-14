@@ -1,6 +1,13 @@
 # Jupyter 公式の最小イメージ(内部は conda/mamba 構成)
 FROM quay.io/jupyter/minimal-notebook:latest
 
+# Triton(torch.compile など)が実行時に C コードをビルドするため、C コンパイラを入れる
+USER root
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends gcc libc6-dev \
+ && rm -rf /var/lib/apt/lists/*
+USER ${NB_UID}
+
 # conda 環境を作成する
 COPY environment.yml /tmp/environment.yml
 RUN mamba env create -f /tmp/environment.yml \
