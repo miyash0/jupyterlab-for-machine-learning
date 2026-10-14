@@ -25,4 +25,4 @@ RUN cp /tmp/follow_notebook_kernel.py "$(python -c 'import site; print(site.gets
 
 # TensorFlow 2.21 は cusolver の場所を検索パスに含めていないため、GPU を認識しない。
 # PyTorch を先に import すれば動くが、TensorFlow 単独でも動くようにパスを足す
-ENV LD_LIBRARY_PATH="/opt/conda/envs/ml/lib/python3.11/site-packages/nvidia/cusolver/lib"
+ENV LD_LIBRARY_PATH="/opt/conda/envs/ml/lib/python3.13/site-packages/nvidia/cusolver/lib"
