@@ -2,9 +2,10 @@
 FROM quay.io/jupyter/minimal-notebook:latest
 
 # Triton(torch.compile など)が実行時に C コードをビルドするため、C コンパイラを入れる
+# Matplotlib などで日本語を表示するため、日本語フォント(Noto CJK)を入れる
 USER root
 RUN apt-get update \
- && apt-get install -y --no-install-recommends gcc libc6-dev \
+ && apt-get install -y --no-install-recommends gcc libc6-dev fonts-noto-cjk \
  && rm -rf /var/lib/apt/lists/*
 USER ${NB_UID}
 
