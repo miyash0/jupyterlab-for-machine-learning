@@ -26,6 +26,10 @@ RUN --mount=type=cache,target=/home/jovyan/.cache/uv,uid=1000,gid=100 \
  && fix-permissions "${CONDA_DIR}" \
  && fix-permissions "/home/${NB_USER}"
 
+# JupyterLab の拡張機能は、サーバーが動くベース環境(/opt/conda)に入れる
+RUN pip install --no-cache-dir lckr-jupyterlab-variableinspector \
+ && fix-permissions "${CONDA_DIR}"
+
 # サーバー設定(ルートを ./work にする、ノートブック移動時にカーネルの cwd を追従させる)
 COPY jupyter/jupyter_server_config.py /usr/local/etc/jupyter/jupyter_server_config.py
 COPY jupyter/follow_notebook_kernel.py /tmp/follow_notebook_kernel.py
