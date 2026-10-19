@@ -9,15 +9,18 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/*
 USER ${NB_UID}
 
+# PyPI のパッケージは pip ではなく uv で入れる。uv はベース環境に置き、どの環境にもこれを使う
 # conda 環境を作成する
 COPY environment.yml /tmp/environment.yml
-RUN mamba env create -f /tmp/environment.yml \
+RUN mamba install -y -n base uv \
+ && mamba env create -f /tmp/environment.yml \
  && mamba clean -afy
 
-# pip パッケージは uv で入れる。ダウンロードはキャッシュして、再ビルド時に使い回す
+# ダウンロードはキャッシュして、再ビルド時に使い回す
+ENV UV_LINK_MODE=copy
 COPY requirements.txt /tmp/requirements.txt
 RUN --mount=type=cache,target=/home/jovyan/.cache/uv,uid=1000,gid=100 \
-    UV_LINK_MODE=copy /opt/conda/envs/ml/bin/uv pip install \
+    uv pip install \
       --python /opt/conda/envs/ml/bin/python \
       --torch-backend=cu126 \
       -r /tmp/requirements.txt \
@@ -27,7 +30,9 @@ RUN --mount=type=cache,target=/home/jovyan/.cache/uv,uid=1000,gid=100 \
  && fix-permissions "/home/${NB_USER}"
 
 # JupyterLab の拡張機能は、サーバーが動くベース環境(/opt/conda)に入れる
-RUN pip install --no-cache-dir lckr-jupyterlab-variableinspector \
+RUN --mount=type=cache,target=/home/jovyan/.cache/uv,uid=1000,gid=100 \
+    uv pip install --python /opt/conda/bin/python \
+      lckr-jupyterlab-variableinspector \
  && fix-permissions "${CONDA_DIR}"
 
 # サーバー設定(ルートを ./work にする、ノートブック移動時にカーネルの cwd を追従させる)
