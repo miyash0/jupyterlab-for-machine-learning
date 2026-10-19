@@ -1,0 +1,4 @@
+# Matplotlib の標準設定(環境変数 MATPLOTLIBRC で読み込む)
+# 日本語を表示できるよう、Noto Sans CJK JP を優先し、ない文字は DejaVu Sans で補う
+font.family:     sans-serif
+font.sans-serif: Noto Sans CJK JP, DejaVu Sans

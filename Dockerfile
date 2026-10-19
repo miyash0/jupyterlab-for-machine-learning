@@ -31,6 +31,10 @@ COPY jupyter/jupyter_server_config.py /usr/local/etc/jupyter/jupyter_server_conf
 COPY jupyter/follow_notebook_kernel.py /tmp/follow_notebook_kernel.py
 RUN cp /tmp/follow_notebook_kernel.py "$(python -c 'import site; print(site.getsitepackages()[0])')/"
 
+# Matplotlib の標準フォントを日本語対応のものにする
+COPY jupyter/matplotlibrc /usr/local/etc/matplotlib/matplotlibrc
+ENV MATPLOTLIBRC="/usr/local/etc/matplotlib/matplotlibrc"
+
 # TensorFlow 2.21 は cusolver の場所を検索パスに含めていないため、GPU を認識しない。
 # PyTorch を先に import すれば動くが、TensorFlow 単独でも動くようにパスを足す
 ENV LD_LIBRARY_PATH="/opt/conda/envs/ml/lib/python3.13/site-packages/nvidia/cusolver/lib"
